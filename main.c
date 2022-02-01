@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct Node {
     char *data;
@@ -41,6 +42,34 @@ LNode *list_insert(LNode *list_head, char *string) {
     return list_head;
 }
 
+int list_find(LNode *list_head, char *string) {
+    // Returns the first position where the element was found, else -1.
+    int str_was_null = 0;
+    if (string == NULL) {
+        str_was_null = 1;
+        string = (char *)malloc(100 * sizeof(char));
+        printf("Enter new string to find (max 100 char): ");
+        scanf("%s", string);
+    }
+    int found = -1;
+    int pos = 0;
+    LNode *current = list_head;
+    while (current != NULL) {
+        if (strcmp(string, current->data) == 0) {
+            found = pos;
+            break;
+        }
+        current = current->next;
+        pos++;
+    }
+    // Release the memory for the string if it was dynamically allocated.
+    if (str_was_null == 1) {
+        free(string);
+        string = NULL;
+    }
+    return found;
+}
+
 void list_print(LNode *list_head) {
     LNode *current = list_head;
     while (current != NULL) {
@@ -53,5 +82,8 @@ int main(int argc, char *argv[]) {
     LNode *list = NULL;
     list = list_insert(list, NULL);
     list = list_insert(list, NULL);
+
     list_print(list);
+    int pos = list_find(list, NULL);
+    printf("pos: %i\n", pos);
 }
